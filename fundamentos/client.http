@@ -1,0 +1,31 @@
+GET http://localhost:3333/users?search=C
+Content-Type: application/json
+
+{}
+
+###
+
+POST http://localhost:3333/users
+Content-Type: application/json
+
+{
+    "name":"Caio",
+    "email":"email@mail.com"
+}
+
+###
+
+DELETE http://localhost:3333/users/be64504e-ad5b-4fa9-b0ff-2f33a29b49dc
+Content-Type: application/json
+
+{
+}
+
+###
+
+PUT http://localhost:3333/users/138c4f2a-a769-4a95-ad04-d82fcc3ee2a7
+Content-Type: application/json
+
+{
+    "name": "Caio M. S."
+}
