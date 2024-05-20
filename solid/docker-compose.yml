@@ -5,7 +5,7 @@ services:
   db:
     image: postgres
     restart: always
-    container_name: postgres_db
+    # container_name: postgres_db
     env_file:
       - .env
     environment:
