@@ -20,3 +20,12 @@ content-Type: application/json
     "email": "email3@mail.com",
     "password": "123456"
 }
+
+###
+
+GET http://localhost:3333/me
+content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1Zjc4MjMwMC1kZjkzLTQ2ZjQtYTY3Ni0xMzRhODlmNTg3ZWUiLCJpYXQiOjE3MTcwMTI0ODR9.IKG0f4m0Bog0vSXpAerMqdsv61N0vZ0p4lG8Jxe-7TQ
+
+{
+}
