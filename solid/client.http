@@ -29,3 +29,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1Zjc4MjMwM
 
 {
 }
+
+###
+
+PATCH http://localhost:3333/token/refresh
+content-Type: application/json
+Cookie: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1Zjc4MjMwMC1kZjkzLTQ2ZjQtYTY3Ni0xMzRhODlmNTg3ZWUiLCJpYXQiOjE3MTcxNjE1MzcsImV4cCI6MTcxNzc2NjMzN30.aYbz2eoOtJa7TPj9YJSCF_Q1AZHTD6Nq98Pvu096XjQ; Path=/; HttpOnly; Secure; SameSite=Strict
+
+{
+}
