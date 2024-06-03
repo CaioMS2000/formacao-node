@@ -13,7 +13,7 @@ describe("Search nearby gyms (e2e)", () => {
 	});
 
 	test("should be able to search nearby gyms", async () => {
-		const { token } = await createAndAuthenticateUser(app);
+		const { token } = await createAndAuthenticateUser(app, true);
 		// await gymsRepository.create({
 		// 	title: "Near gym",
 		// latitude: -16.6782504,
