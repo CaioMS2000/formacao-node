@@ -1,6 +1,6 @@
 import { Optional } from "@/core/@types/optional";
-import { Entity } from "@/core/entities/entity";
-import { UniqueId } from "@/core/entities/unique-id";
+import { Entity } from "@/domain/forum/enterprise/entities/entity";
+import { UniqueId } from "@/domain/forum/enterprise/entities/unique-id";
 
 interface AnswerProps {
 	content: string;
