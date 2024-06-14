@@ -11,13 +11,13 @@ describe("Create answer", () => {
 	});
 
 	test("should be able to  create an answer", async () => {
-		const {answer} = await useCase.execute({
+		const result = await useCase.execute({
 			instructorId: "1",
 			questionId: "1",
 			content: "nova resposta",
 		});
 	
-		expect(answer.id).toBeTruthy();
-		expect(inMemoryAnswersRepository.answers[0].id).toBe(answer.id);
+		expect(result.isRight()).toBe(true);
+		expect(inMemoryAnswersRepository.answers[0]).toBe(result.value.answer);
 	});
 });

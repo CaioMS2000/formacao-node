@@ -2,7 +2,7 @@ import { Optional } from "@/core/@types/optional";
 import { Entity } from "@/domain/forum/enterprise/entities/entity";
 import { UniqueId } from "@/domain/forum/enterprise/entities/unique-id";
 
-interface AnswerProps {
+export interface AnswerProps {
 	content: string;
 	authorId: UniqueId;
 	questionId: UniqueId;
@@ -45,7 +45,7 @@ export class Answer extends Entity<AnswerProps> {
 	}
 
 	static create(props: Optional<AnswerProps, "createdAt">, id?: UniqueId) {
-		const answer = new Answer({ ...props, createdAt: new Date() }, id);
+		const answer = new Answer({ ...props, createdAt: props.createdAt ?? new Date() }, id);
 
 		return answer;
 	}

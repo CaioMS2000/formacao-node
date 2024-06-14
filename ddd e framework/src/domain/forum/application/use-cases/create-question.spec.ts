@@ -11,9 +11,9 @@ describe("Create question", () => {
     });
 
     test("should be able to create a question", async () => {
-        const {question} = await useCase.execute({content: "any content", title: "Nova pergunta", authorId: "1"});
+        const result = await useCase.execute({content: "any content", title: "Nova pergunta", authorId: "1"});
     
-        expect(question.id).toBeTruthy()
-        expect(inMemoryQuestionsRepository.questions[0].id).toBe(question.id);
+        expect(result.isRight()).toBe(true);
+        expect(inMemoryQuestionsRepository.questions[0]).toEqual(result.value.question);
     });
 })

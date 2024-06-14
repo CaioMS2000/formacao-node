@@ -4,7 +4,7 @@ import { UniqueId } from "@/domain/forum/enterprise/entities/unique-id";
 import { Optional } from "@/core/@types/optional";
 import dayjs from "dayjs";
 
-interface QuestionProps {
+export interface QuestionProps {
 	title: string;
 	bestAnswerId?: UniqueId;
 	authorId: UniqueId;
@@ -74,7 +74,7 @@ export class Question extends Entity<QuestionProps> {
 		const question = new Question(
 			{
 				...props,
-				createdAt: new Date(),
+				createdAt: props.createdAt ?? new Date(),
 				slug: props.slug ?? Slug.createFromText(props.title),
 			},
 			id
