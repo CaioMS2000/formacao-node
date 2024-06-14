@@ -1,5 +1,8 @@
-import { QuestionComment, QuestionCommentProps } from "@/domain/entities/question-comment";
-import { UniqueId } from "@/domain/forum/enterprise/entities/unique-id";
+import {
+	QuestionComment,
+	QuestionCommentProps,
+} from "@/domain/forum/enterprise/entities/question-comment";
+import { UniqueId } from "@/core/entities/unique-id";
 import { faker } from "@faker-js/faker";
 
 export function makeQuestionComment(
@@ -16,5 +19,5 @@ export function makeQuestionComment(
 		id
 	);
 
-    return newQuestionComment;
+	return newQuestionComment;
 }

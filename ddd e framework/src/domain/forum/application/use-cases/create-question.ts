@@ -1,6 +1,6 @@
-import { Question } from "@/domain/entities/question";
+import { Question } from "@/domain/forum/enterprise/entities/question";
 import { QuestionsRepository } from "../repositories/questions-repository";
-import { UniqueId } from "../../enterprise/entities/unique-id";
+import { UniqueId } from "../../../../core/entities/unique-id";
 import { Either, right } from "@/core/either";
 
 interface CreateQuestionUseCaseRequest {
@@ -9,24 +9,29 @@ interface CreateQuestionUseCaseRequest {
 	authorId: string;
 }
 
-type CreateQuestionUseCaseResponse = Either<null, {
-	question: Question;
-}>
+type CreateQuestionUseCaseResponse = Either<
+	null,
+	{
+		question: Question;
+	}
+>;
 
 export class CreateQuestionUseCase {
-    constructor(
-        private questionsRepository: QuestionsRepository,
-    ) {}
+	constructor(private questionsRepository: QuestionsRepository) {}
 
-	async execute({content, title, authorId}: CreateQuestionUseCaseRequest): Promise<CreateQuestionUseCaseResponse> {
+	async execute({
+		content,
+		title,
+		authorId,
+	}: CreateQuestionUseCaseRequest): Promise<CreateQuestionUseCaseResponse> {
 		const question = Question.create({
 			content,
 			title,
 			authorId: new UniqueId(authorId),
 		});
 
-        await this.questionsRepository.create(question);
+		await this.questionsRepository.create(question);
 
-		return right({question});
+		return right({ question });
 	}
 }

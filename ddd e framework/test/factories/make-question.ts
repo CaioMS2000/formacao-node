@@ -1,6 +1,9 @@
-import { Question, QuestionProps } from "@/domain/entities/question";
-import { Slug } from "@/domain/entities/value-objects/slug";
-import { UniqueId } from "@/domain/forum/enterprise/entities/unique-id";
+import {
+	Question,
+	QuestionProps,
+} from "@/domain/forum/enterprise/entities/question";
+import { Slug } from "@/domain/forum/enterprise/entities/value-objects/slug";
+import { UniqueId } from "@/core/entities/unique-id";
 import { faker } from "@faker-js/faker";
 
 export function makeQuestion(

@@ -1,4 +1,4 @@
-import { Answer } from "@/domain/entities/answer";
+import { Answer } from "@/domain/forum/enterprise/entities/answer";
 import { AnswerRepository } from "../repositories/answers-repository";
 import { Either, left, right } from "@/core/either";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
@@ -10,17 +10,20 @@ interface EditAnswerUseCaseRequest {
 	content: string;
 }
 
-type EditAnswerUseCaseResponse = Either<ResourceNotFoundError|NotAllowedError, {
-    answer: Answer
-}>
+type EditAnswerUseCaseResponse = Either<
+	ResourceNotFoundError | NotAllowedError,
+	{
+		answer: Answer;
+	}
+>;
 
 export class EditAnswerUseCase {
 	constructor(private answerRepository: AnswerRepository) {}
 
 	async execute({
 		userId,
-        content,
-        answerId,
+		content,
+		answerId,
 	}: EditAnswerUseCaseRequest): Promise<EditAnswerUseCaseResponse> {
 		const answer = await this.answerRepository.findById(answerId);
 
@@ -28,14 +31,14 @@ export class EditAnswerUseCase {
 			return left(new ResourceNotFoundError());
 		}
 
-		if (answer.authorId.toString()!== userId) {
+		if (answer.authorId.toString() !== userId) {
 			return left(new NotAllowedError());
 		}
 
-		answer.content = content
+		answer.content = content;
 
-        await this.answerRepository.save(answer);
+		await this.answerRepository.save(answer);
 
-		return right({answer});
+		return right({ answer });
 	}
 }

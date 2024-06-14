@@ -1,7 +1,7 @@
 import { Either, left, right } from "@/core/either";
 import { AnswerRepository } from "../repositories/answers-repository";
 import { QuestionsRepository } from "../repositories/questions-repository";
-import { Question } from "@/domain/entities/question";
+import { Question } from "@/domain/forum/enterprise/entities/question";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { NotAllowedError } from "./errors/not-allowed-error";
 

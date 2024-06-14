@@ -1,4 +1,4 @@
-import { AnswerComment } from "@/domain/entities/answer-comment";
+import { AnswerComment } from "@/domain/forum/enterprise/entities/answer-comment";
 import { AnswerCommentRepository } from "../repositories/answer-comments-repository";
 import { Either, right } from "@/core/either";
 

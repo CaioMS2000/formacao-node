@@ -1,44 +1,51 @@
 import { PaginationParams } from "@/core/repositories/pagination-params";
-import { Question } from "@/domain/entities/question";
+import { Question } from "@/domain/forum/enterprise/entities/question";
 import { QuestionsRepository } from "@/domain/forum/application/repositories/questions-repository";
 
 export class InMemoryQuestionsRepository implements QuestionsRepository {
 	questions: Question[] = [];
 
-    async create(question: Question) {
-        this.questions.push(question);
-    }
+	async create(question: Question) {
+		this.questions.push(question);
+	}
 
-    async save(question: Question) {
-        const index = this.questions.findIndex(q => q.id.toString() === question.id.toString());
+	async save(question: Question) {
+		const index = this.questions.findIndex(
+			(q) => q.id.toString() === question.id.toString()
+		);
 
-        this.questions[index] = question;
-    }
-    
-    async delete(question: Question) {
-        const index = this.questions.findIndex(q => q.id.toString() === question.id.toString());
+		this.questions[index] = question;
+	}
 
-        this.questions.splice(index, 1);
-    }
+	async delete(question: Question) {
+		const index = this.questions.findIndex(
+			(q) => q.id.toString() === question.id.toString()
+		);
 
-    async findBySlug(slug: string) {
-        const question = this.questions.find(question => question.slug.text === slug);
+		this.questions.splice(index, 1);
+	}
 
-        return question ?? null;
-    }
-    
-    async findById(id: string) {
-        const question = this.questions.find(question => question.id.toString() === id);
+	async findBySlug(slug: string) {
+		const question = this.questions.find(
+			(question) => question.slug.text === slug
+		);
 
-        return question ?? null;
-    }
+		return question ?? null;
+	}
 
-    async findManyRecent(params: PaginationParams) {
-        const questions = this.questions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(
-            (params.page - 1) * 20,
-            params.page * 20,
-        );
+	async findById(id: string) {
+		const question = this.questions.find(
+			(question) => question.id.toString() === id
+		);
 
-        return questions
-    }
+		return question ?? null;
+	}
+
+	async findManyRecent(params: PaginationParams) {
+		const questions = this.questions
+			.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+			.slice((params.page - 1) * 20, params.page * 20);
+
+		return questions;
+	}
 }

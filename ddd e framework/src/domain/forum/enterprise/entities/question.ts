@@ -1,6 +1,6 @@
 import { Slug } from "./value-objects/slug";
-import { Entity } from "@/domain/forum/enterprise/entities/entity";
-import { UniqueId } from "@/domain/forum/enterprise/entities/unique-id";
+import { Entity } from "@/core/entities/entity";
+import { UniqueId } from "@/core/entities/unique-id";
 import { Optional } from "@/core/@types/optional";
 import dayjs from "dayjs";
 

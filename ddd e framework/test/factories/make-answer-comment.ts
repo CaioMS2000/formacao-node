@@ -1,5 +1,8 @@
-import { AnswerComment, AnswerCommentProps } from "@/domain/entities/answer-comment";
-import { UniqueId } from "@/domain/forum/enterprise/entities/unique-id";
+import {
+	AnswerComment,
+	AnswerCommentProps,
+} from "@/domain/forum/enterprise/entities/answer-comment";
+import { UniqueId } from "@/core/entities/unique-id";
 import { faker } from "@faker-js/faker";
 
 export function makeAnswerComment(
@@ -16,5 +19,5 @@ export function makeAnswerComment(
 		id
 	);
 
-    return newAnswerComment;
+	return newAnswerComment;
 }

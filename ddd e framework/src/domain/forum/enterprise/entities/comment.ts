@@ -1,5 +1,5 @@
-import { Entity } from "../forum/enterprise/entities/entity";
-import { UniqueId } from "../forum/enterprise/entities/unique-id";
+import { Entity } from "../../../../core/entities/entity";
+import { UniqueId } from "../../../../core/entities/unique-id";
 
 export interface CommentProps {
 	authorId: UniqueId;
@@ -8,7 +8,9 @@ export interface CommentProps {
 	updateddAt?: Date;
 }
 
-export abstract class Comment<Props extends CommentProps> extends Entity<Props> {
+export abstract class Comment<
+	Props extends CommentProps
+> extends Entity<Props> {
 	private touch() {
 		this.props.updateddAt = new Date();
 	}

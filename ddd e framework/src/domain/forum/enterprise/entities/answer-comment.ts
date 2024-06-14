@@ -1,5 +1,5 @@
 import { Optional } from "@/core/@types/optional";
-import { UniqueId } from "../forum/enterprise/entities/unique-id";
+import { UniqueId } from "../../../../core/entities/unique-id";
 import { Comment, CommentProps } from "./comment";
 
 export interface AnswerCommentProps extends CommentProps {
@@ -7,9 +7,9 @@ export interface AnswerCommentProps extends CommentProps {
 }
 
 export class AnswerComment extends Comment<AnswerCommentProps> {
-    get answerId() {
-        return this.props.answerId;
-    }
+	get answerId() {
+		return this.props.answerId;
+	}
 
 	static create(
 		props: Optional<AnswerCommentProps, "createdAt">,

@@ -1,5 +1,5 @@
 import { PaginationParams } from "@/core/repositories/pagination-params";
-import { Answer } from "@/domain/entities/answer";
+import { Answer } from "@/domain/forum/enterprise/entities/answer";
 import { AnswerRepository } from "@/domain/forum/application/repositories/answers-repository";
 
 export class InMemoryAnswerRepository implements AnswerRepository {
@@ -34,12 +34,9 @@ export class InMemoryAnswerRepository implements AnswerRepository {
 	}
 
 	async findManyByQuestionId(questionId: string, params: PaginationParams) {
-		const answers = this.answers.filter(
-			(answer) => answer.questionId.toString() === questionId
-		).slice(
-			(params.page - 1) * 20,
-			params.page * 20
-		);
+		const answers = this.answers
+			.filter((answer) => answer.questionId.toString() === questionId)
+			.slice((params.page - 1) * 20, params.page * 20);
 
 		return answers;
 	}

@@ -1,5 +1,5 @@
-import { UniqueId } from "@/domain/forum/enterprise/entities/unique-id";
-import { Answer } from "@/domain/entities/answer";
+import { UniqueId } from "@/core/entities/unique-id";
+import { Answer } from "@/domain/forum/enterprise/entities/answer";
 import { AnswerRepository } from "../repositories/answers-repository";
 import { Either, right } from "@/core/either";
 
