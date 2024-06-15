@@ -1,9 +1,12 @@
 import { PaginationParams } from "@/core/repositories/pagination-params";
 import { Question } from "@/domain/forum/enterprise/entities/question";
 import { QuestionsRepository } from "@/domain/forum/application/repositories/questions-repository";
+import { QuestionAttachmentRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
 
 export class InMemoryQuestionsRepository implements QuestionsRepository {
 	questions: Question[] = [];
+
+	constructor(private questionAttachmentRepository: QuestionAttachmentRepository) {}
 
 	async create(question: Question) {
 		this.questions.push(question);
@@ -23,6 +26,9 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
 		);
 
 		this.questions.splice(index, 1);
+		this.questionAttachmentRepository.deleteManyByQuestionId(
+			question.id.toString()
+		);
 	}
 
 	async findBySlug(slug: string) {

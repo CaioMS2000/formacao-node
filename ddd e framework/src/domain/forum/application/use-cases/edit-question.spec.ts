@@ -3,14 +3,22 @@ import { makeQuestion } from "test/factories/make-question";
 import { EditQuestionUseCase } from "./edit-question";
 import { UniqueId } from "../../../../core/entities/unique-id";
 import { NotAllowedError } from "./errors/not-allowed-error";
+import { InMemoryQuestionAttachmentsRepository } from "test/repositories/in-memory-question-attachments-repository";
+import { makeQuestionAttachment } from "test/factories/make-question-attachment";
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
+let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository;
 let useCase: EditQuestionUseCase;
 
 describe("Edit question", () => {
 	beforeEach(() => {
 		inMemoryQuestionsRepository = new InMemoryQuestionsRepository();
-		useCase = new EditQuestionUseCase(inMemoryQuestionsRepository);
+		inMemoryQuestionAttachmentsRepository =
+			new InMemoryQuestionAttachmentsRepository();
+		useCase = new EditQuestionUseCase(
+			inMemoryQuestionsRepository,
+			inMemoryQuestionAttachmentsRepository
+		);
 	});
 
 	test("should be able to edit a question", async () => {
@@ -20,18 +28,31 @@ describe("Edit question", () => {
 		);
 
 		inMemoryQuestionsRepository.questions.push(newQuestion);
+		inMemoryQuestionAttachmentsRepository.attachments.push(
+			makeQuestionAttachment({
+				questionId: newQuestion.id,
+				attachmentId: new UniqueId("1"),
+			}),
+			makeQuestionAttachment({
+				questionId: newQuestion.id,
+				attachmentId: new UniqueId("2"),
+			})
+		);
 
 		await useCase.execute({
 			userId: "author-id",
 			title: "título de teste",
 			content: "conteudo de teste",
 			questionId: "any-id",
+			attachmentsIds: ["1", "3"]
 		});
 
 		expect(inMemoryQuestionsRepository.questions[0]).toMatchObject({
 			title: "título de teste",
 			content: "conteudo de teste",
 		});
+		expect(inMemoryQuestionsRepository.questions[0].attachments.currentItems).toHaveLength(2)
+        expect(inMemoryQuestionsRepository.questions[0].attachments.currentItems).toEqual([expect.objectContaining({attachmentId: new UniqueId("1")}), expect.objectContaining({attachmentId: new UniqueId("3")})])
 	});
 
 	test("should not be able to edit a question from another user", async () => {
@@ -47,6 +68,7 @@ describe("Edit question", () => {
 			title: "título de teste",
 			content: "conteudo de teste",
 			questionId: "any-id",
+			attachmentsIds: []
 		});
 
 		expect(result.isLeft()).toBe(true);

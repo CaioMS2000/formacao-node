@@ -3,12 +3,17 @@ import { QuestionsRepository } from "../repositories/questions-repository";
 import { Either, left, right } from "@/core/either";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { NotAllowedError } from "./errors/not-allowed-error";
+import { QuestionAttachmentRepository } from "../repositories/question-attachments-repository";
+import { QuestionAttachmentList } from "../../enterprise/entities/question-attachment-list";
+import { QuestionAttachment } from "../../enterprise/entities/question-attachment";
+import { UniqueId } from "@/core/entities/unique-id";
 
 interface EditQuestionUseCaseRequest {
 	userId: string;
 	questionId: string;
 	title: string;
 	content: string;
+	attachmentsIds: string[];
 }
 
 type EditQuestionUseCaseResponse = Either<
@@ -19,13 +24,17 @@ type EditQuestionUseCaseResponse = Either<
 >;
 
 export class EditQuestionUseCase {
-	constructor(private questionsRepository: QuestionsRepository) {}
+	constructor(
+		private questionsRepository: QuestionsRepository,
+		private questionAttachmentRepository: QuestionAttachmentRepository
+	) {}
 
 	async execute({
 		userId,
 		title,
 		content,
 		questionId,
+		attachmentsIds,
 	}: EditQuestionUseCaseRequest): Promise<EditQuestionUseCaseResponse> {
 		const question = await this.questionsRepository.findById(questionId);
 
@@ -37,8 +46,25 @@ export class EditQuestionUseCase {
 			return left(new NotAllowedError());
 		}
 
+		const currentQuestionAttachments =
+			await this.questionAttachmentRepository.findManyByQuestionId(
+				questionId
+			);
+		const questionAttachmentList = new QuestionAttachmentList(
+			currentQuestionAttachments
+		);
+		const questionAttachments = attachmentsIds.map((id) =>
+			QuestionAttachment.create({
+				attachmentId: new UniqueId(id),
+				questionId: question.id,
+			})
+		);
+
+		questionAttachmentList.update(questionAttachments);
+
 		question.title = title;
 		question.content = content;
+		question.attachments = questionAttachmentList;
 
 		await this.questionsRepository.save(question);
 
