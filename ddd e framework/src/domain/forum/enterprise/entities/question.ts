@@ -3,8 +3,8 @@ import { UniqueId } from "@/core/entities/unique-id";
 import { Optional } from "@/core/@types/optional";
 import dayjs from "dayjs";
 import { AggregateRoot } from "@/core/entities/aggregate-root";
-import { QuestionAttachment } from "./question-attachment";
 import { QuestionAttachmentList } from "./question-attachment-list";
+import { QuestionBestAnswerChosenEvent } from "../events/question-best-answer-chosen-event";
 
 export interface QuestionProps {
 	title: string;
@@ -12,7 +12,7 @@ export interface QuestionProps {
 	authorId: UniqueId;
 	content: string;
 	slug: Slug;
-	attachments: QuestionAttachmentList
+	attachments: QuestionAttachmentList;
 	createdAt: Date;
 	updateddAt?: Date;
 }
@@ -70,11 +70,17 @@ export class Question extends AggregateRoot<QuestionProps> {
 	}
 
 	set bestAnswerId(id: UniqueId | undefined) {
+		if(!id) return;
+
+		if(!this.props.bestAnswerId || !this.props.bestAnswerId.equals(id)){
+			this.addDomainEvent(new QuestionBestAnswerChosenEvent(this, id));
+		}
+
 		this.props.bestAnswerId = id;
 		this.touch();
 	}
 
-	set attachments(attachments:QuestionAttachmentList) {
+	set attachments(attachments: QuestionAttachmentList) {
 		this.props.attachments = attachments;
 		this.touch();
 	}
@@ -87,7 +93,7 @@ export class Question extends AggregateRoot<QuestionProps> {
 			{
 				...props,
 				createdAt: props.createdAt ?? new Date(),
-				attachments: props.attachments?? new QuestionAttachmentList(),
+				attachments: props.attachments ?? new QuestionAttachmentList(),
 				slug: props.slug ?? Slug.createFromText(props.title),
 			},
 			id

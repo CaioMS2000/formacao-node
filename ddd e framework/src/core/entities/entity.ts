@@ -12,4 +12,12 @@ export class Entity<T>{
         this.props = props
         this._id = id ?? new UniqueId();
     }
+
+    public equals(other: Entity<T>): boolean{
+        if(other === this) return true;
+
+        if(other.id == this._id) return true;
+
+        return false
+    }
 }

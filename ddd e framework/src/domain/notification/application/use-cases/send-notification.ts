@@ -3,26 +3,33 @@ import { Notification } from "../../enterprise/entities/notification";
 import { NotificationRepository } from "../repositories/notification-repository";
 import { UniqueId } from "@/core/entities/unique-id";
 
-interface SendNotificationUseRequest{
-    recipientId: string;
+export interface SendNotificationUseCaseRequest {
+	recipientId: string;
 	title: string;
 	content: string;
 }
 
-type SendNotificationUseResponse = Either<null, {notification: Notification}>
+export type SendNotificationUseCaseResponse = Either<
+	null,
+	{ notification: Notification }
+>;
 
 export class SendNotificationUsecase {
-    constructor(private notificationRepository: NotificationRepository) {}
+	constructor(private notificationRepository: NotificationRepository) {}
 
-    async execute({content, title, recipientId}: SendNotificationUseRequest): Promise<SendNotificationUseResponse> {
-        const notification = Notification.create({
-            content,
-            title,
-            recipientId: new UniqueId(recipientId)
-        });
+	async execute({
+		content,
+		title,
+		recipientId,
+	}: SendNotificationUseCaseRequest): Promise<SendNotificationUseCaseResponse> {
+		const notification = Notification.create({
+			content,
+			title,
+			recipientId: new UniqueId(recipientId),
+		});
 
-        await this.notificationRepository.create(notification);
+		await this.notificationRepository.create(notification);
 
-        return right({notification});
-    }
+		return right({ notification });
+	}
 }
