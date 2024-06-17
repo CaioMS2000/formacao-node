@@ -1,6 +1,6 @@
 import { Question } from "@/domain/forum/enterprise/entities/question";
 import { QuestionsRepository } from "../repositories/questions-repository";
-import { UniqueId } from "../../../../core/entities/unique-id";
+import { UniqueId } from "@/core/entities/unique-id";
 import { Either, right } from "@/core/either";
 import { QuestionAttachment } from "../../enterprise/entities/question-attachment";
 import { QuestionAttachmentList } from "../../enterprise/entities/question-attachment-list";
@@ -33,7 +33,12 @@ export class CreateQuestionUseCase {
 			title,
 			authorId: new UniqueId(authorId),
 		});
-		const questionAttachments = attachmentsIds.map((attachmentId) => (QuestionAttachment.create({attachmentId: new UniqueId(attachmentId), questionId: question.id})));
+		const questionAttachments = attachmentsIds.map((attachmentId) =>
+			QuestionAttachment.create({
+				attachmentId: new UniqueId(attachmentId),
+				questionId: question.id,
+			})
+		);
 
 		question.attachments = new QuestionAttachmentList(questionAttachments);
 

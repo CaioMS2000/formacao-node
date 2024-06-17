@@ -1,5 +1,5 @@
-import { Entity } from "../../../../core/entities/entity";
-import { UniqueId } from "../../../../core/entities/unique-id";
+import { Entity } from "@/core/entities/entity";
+import { UniqueId } from "@/core/entities/unique-id";
 
 export interface CommentProps {
 	authorId: UniqueId;

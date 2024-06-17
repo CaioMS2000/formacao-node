@@ -1,8 +1,8 @@
 import { InMemoryQuestionsRepository } from "test/repositories/in-memory-questions-repository";
 import { makeQuestion } from "test/factories/make-question";
 import { EditQuestionUseCase } from "./edit-question";
-import { UniqueId } from "../../../../core/entities/unique-id";
-import { NotAllowedError } from "./errors/not-allowed-error";
+import { UniqueId } from "@/core/entities/unique-id";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 import { InMemoryQuestionAttachmentsRepository } from "test/repositories/in-memory-question-attachments-repository";
 import { makeQuestionAttachment } from "test/factories/make-question-attachment";
 
@@ -14,7 +14,9 @@ describe("Edit question", () => {
 	beforeEach(() => {
 		inMemoryQuestionAttachmentsRepository =
 			new InMemoryQuestionAttachmentsRepository();
-		inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentsRepository);
+		inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+			inMemoryQuestionAttachmentsRepository
+		);
 		useCase = new EditQuestionUseCase(
 			inMemoryQuestionsRepository,
 			inMemoryQuestionAttachmentsRepository
@@ -44,15 +46,22 @@ describe("Edit question", () => {
 			title: "título de teste",
 			content: "conteudo de teste",
 			questionId: "any-id",
-			attachmentsIds: ["1", "3"]
+			attachmentsIds: ["1", "3"],
 		});
 
 		expect(inMemoryQuestionsRepository.questions[0]).toMatchObject({
 			title: "título de teste",
 			content: "conteudo de teste",
 		});
-		expect(inMemoryQuestionsRepository.questions[0].attachments.currentItems).toHaveLength(2)
-        expect(inMemoryQuestionsRepository.questions[0].attachments.currentItems).toEqual([expect.objectContaining({attachmentId: new UniqueId("1")}), expect.objectContaining({attachmentId: new UniqueId("3")})])
+		expect(
+			inMemoryQuestionsRepository.questions[0].attachments.currentItems
+		).toHaveLength(2);
+		expect(
+			inMemoryQuestionsRepository.questions[0].attachments.currentItems
+		).toEqual([
+			expect.objectContaining({ attachmentId: new UniqueId("1") }),
+			expect.objectContaining({ attachmentId: new UniqueId("3") }),
+		]);
 	});
 
 	test("should not be able to edit a question from another user", async () => {
@@ -68,7 +77,7 @@ describe("Edit question", () => {
 			title: "título de teste",
 			content: "conteudo de teste",
 			questionId: "any-id",
-			attachmentsIds: []
+			attachmentsIds: [],
 		});
 
 		expect(result.isLeft()).toBe(true);

@@ -1,7 +1,7 @@
 import { InMemoryAnswerRepository } from "test/repositories/in-memory-answers-repository";
 import { FetchQuestionAnswersUseCase } from "./fetch-question-answers";
 import { makeAnswer } from "test/factories/make-answer";
-import { UniqueId } from "../../../../core/entities/unique-id";
+import { UniqueId } from "@/core/entities/unique-id";
 import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository";
 
 let inMemoryAnswerRepository: InMemoryAnswerRepository;
@@ -10,8 +10,11 @@ let useCase: FetchQuestionAnswersUseCase;
 
 describe("Fetch question answers", () => {
 	beforeEach(() => {
-		inMemoryAnswerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository();
-		inMemoryAnswerRepository = new InMemoryAnswerRepository(inMemoryAnswerAttachmentsRepository);
+		inMemoryAnswerAttachmentsRepository =
+			new InMemoryAnswerAttachmentsRepository();
+		inMemoryAnswerRepository = new InMemoryAnswerRepository(
+			inMemoryAnswerAttachmentsRepository
+		);
 		useCase = new FetchQuestionAnswersUseCase(inMemoryAnswerRepository);
 	});
 

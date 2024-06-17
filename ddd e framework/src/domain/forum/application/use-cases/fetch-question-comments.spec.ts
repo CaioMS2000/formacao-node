@@ -1,5 +1,5 @@
 import { makeAnswer } from "test/factories/make-answer";
-import { UniqueId } from "../../../../core/entities/unique-id";
+import { UniqueId } from "@/core/entities/unique-id";
 import { FetchQuestionCommentsUseCase } from "./fetch-question-comments";
 import { InMemoryQuestionCommentsRepository } from "test/repositories/in-memory-question-comments-repository";
 import { makeQuestionComment } from "test/factories/make-question-comment";

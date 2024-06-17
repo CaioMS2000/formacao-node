@@ -1,7 +1,7 @@
 import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comments-repository";
 import { DeleteAnswerCommentUseCase } from "./delete-answer-comment";
 import { makeAnswerComment } from "test/factories/make-answer-comment";
-import { NotAllowedError } from "./errors/not-allowed-error";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository;
 let useCase: DeleteAnswerCommentUseCase;
@@ -16,7 +16,7 @@ describe("Comment on answer", () => {
 	});
 
 	it("should be able to delete answer comment", async () => {
-		const answerComment = makeAnswerComment()
+		const answerComment = makeAnswerComment();
 
 		await inMemoryAnswerCommentsRepository.create(answerComment);
 		await useCase.execute({
@@ -24,20 +24,20 @@ describe("Comment on answer", () => {
 			answerCommentId: answerComment.id.toString(),
 		});
 
-		expect(inMemoryAnswerCommentsRepository.answerComments).toEqual([])
+		expect(inMemoryAnswerCommentsRepository.answerComments).toEqual([]);
 	});
 
 	it("should not be able to delete answer comment", async () => {
-		const answerComment = makeAnswerComment()
+		const answerComment = makeAnswerComment();
 
 		await inMemoryAnswerCommentsRepository.create(answerComment);
-		
+
 		const result = await useCase.execute({
 			authorId: "wrog-id",
 			answerCommentId: answerComment.id.toString(),
-		})
+		});
 
 		expect(result.isLeft()).toBe(true);
-		expect(result.value).toBeInstanceOf(NotAllowedError)
+		expect(result.value).toBeInstanceOf(NotAllowedError);
 	});
 });
