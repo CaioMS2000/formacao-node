@@ -29,6 +29,16 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "email": "email@mail.com",
-    "password": "123456"
+    "title": "Some question 2",
+    "content": "Any content"
+}
+
+###
+
+# @name fetch_recent_questions
+GET {{baseURL}}/questions?page=2
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
 }
