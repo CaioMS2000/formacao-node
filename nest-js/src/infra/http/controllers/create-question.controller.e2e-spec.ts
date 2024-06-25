@@ -1,12 +1,12 @@
-import { AppModule } from "@/app.module";
-import { PrismaService } from "@/prisma/prisma.service";
+import { AppModule } from "@/infra/app.module";
+import { PrismaService } from "@/infra/prisma/prisma.service";
 import { INestApplication } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
 import { hash } from "bcryptjs";
 import request from "supertest";
 
-describe("E2E: Fetch recent questions", () => {
+describe("E2E: Create question", () => {
 	let app: INestApplication;
 	let prisma: PrismaService;
 	let jwt: JwtService;
@@ -23,7 +23,7 @@ describe("E2E: Fetch recent questions", () => {
 		await app.init();
 	});
 
-	test("[GET] /questions", async () => {
+	test("[POST] /questions", async () => {
 		const newUser = await prisma.user.create({
 			data: {
 				name: "Test",
@@ -32,22 +32,20 @@ describe("E2E: Fetch recent questions", () => {
 			},
 		});
 		const accessToken = jwt.sign({ sub: newUser.id });
-        const data = Array.from({length: 10}, (v, i) => i).map(i => ({title: `Question ${i}`, content: `Content ${i}`, authorId: newUser.id, slug: `slug-${i}`}))
-        console.log(data)
-
-        await prisma.question.createMany({
-            data,
-        })
-
 		const response = await request(app.getHttpServer())
-			.get("/questions")
+			.post("/questions")
 			.set("Authorization", `Bearer ${accessToken}`)
 			.send({
 				title: "New question",
 				content: "some content",
 			});
 
-		expect(response.statusCode).toBe(200);
-		expect(response.body).toEqual({questions: Array.from({length: 10}, (v, i) => i).map(i => (expect.objectContaining({title: `Question ${i}`})))});
+		expect(response.status).toBe(201);
+
+		const question = await prisma.question.findFirst({
+			where: { title: "New question" },
+		});
+
+		expect(question).not.toBeNull();
 	});
 });
