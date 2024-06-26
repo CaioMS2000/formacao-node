@@ -1,5 +1,6 @@
 @baseURL = http://localhost:3333
 @authToken = {{authenticate.response.body.access_token}}
+
 # @name create_account
 POST {{baseURL}}/accounts
 Content-Type: application/json
@@ -29,7 +30,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "title": "Some question 2",
+    "title": "Some question",
     "content": "Any content"
 }
 
@@ -37,7 +38,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_recent_questions
 # GET {{baseURL}}/questions?page=2
-GET {{baseURL}}/questions
+GET {{baseURL}}/questions?page=1
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 

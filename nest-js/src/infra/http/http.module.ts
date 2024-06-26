@@ -18,6 +18,11 @@ import { CryptographyModule } from "../cryptography/cryptography.module";
 		CreateQuestionController,
 		FecthRecentQuestionsController,
 	],
-	providers: [CreateQuestionUseCase, FetchRecentQuestionsUseCase, RegisterStudentUseCase, AuthenticateStudentUseCase],
+	providers: [
+		CreateQuestionUseCase,
+		FetchRecentQuestionsUseCase,
+		RegisterStudentUseCase,
+		AuthenticateStudentUseCase,
+	],
 })
 export class HTTPModule {}

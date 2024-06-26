@@ -15,7 +15,6 @@ const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema);
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>;
 
 @Controller("/questions")
-@UseGuards(JwtAuthGuard)
 export class FecthRecentQuestionsController {
 	constructor(private fetchRecentQuestions: FetchRecentQuestionsUseCase) {}
 
