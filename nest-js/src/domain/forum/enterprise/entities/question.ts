@@ -8,18 +8,18 @@ import { QuestionBestAnswerChosenEvent } from "../events/question-best-answer-ch
 
 export interface QuestionProps {
 	title: string;
-	bestAnswerId?: UniqueId;
+	bestAnswerId?: UniqueId|null;
 	authorId: UniqueId;
 	content: string;
 	slug: Slug;
 	attachments: QuestionAttachmentList;
 	createdAt: Date;
-	updateddAt?: Date;
+	updatedAt?: Date|null;
 }
 
 export class Question extends AggregateRoot<QuestionProps> {
 	private touch() {
-		this.props.updateddAt = new Date();
+		this.props.updatedAt = new Date();
 	}
 
 	get title() {
@@ -50,8 +50,8 @@ export class Question extends AggregateRoot<QuestionProps> {
 		return this.props.createdAt;
 	}
 
-	get updateddAt() {
-		return this.props.updateddAt;
+	get updatedAt() {
+		return this.props.updatedAt;
 	}
 
 	get isNew() {
@@ -69,7 +69,7 @@ export class Question extends AggregateRoot<QuestionProps> {
 		this.touch();
 	}
 
-	set bestAnswerId(id: UniqueId | undefined) {
+	set bestAnswerId(id: UniqueId | undefined | null) {
 		if(!id) return;
 
 		if(!this.props.bestAnswerId || !this.props.bestAnswerId.equals(id)){

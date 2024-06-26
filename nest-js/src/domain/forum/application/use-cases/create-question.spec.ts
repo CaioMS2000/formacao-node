@@ -19,7 +19,7 @@ describe("Create question", () => {
         const result = await useCase.execute({content: "any content", title: "Nova pergunta", authorId: "1", attachmentsIds: ["1", "2"]});
     
         expect(result.isRight()).toBe(true);
-        expect(inMemoryQuestionsRepository.questions[0]).toEqual(result.value.question);
+        expect(inMemoryQuestionsRepository.questions[0]).toEqual(result.value?.question);
         expect(inMemoryQuestionsRepository.questions[0].attachments.currentItems).toHaveLength(2)
         expect(inMemoryQuestionsRepository.questions[0].attachments.currentItems).toEqual([expect.objectContaining({attachmentId: new UniqueId("1")}), expect.objectContaining({attachmentId: new UniqueId("2")})])
     });
