@@ -1,50 +1,47 @@
+import { Slug } from "@/domain/forum/enterprise/entities/value-objects/slug";
 import { AppModule } from "@/infra/app.module";
 import { DatabaseModule } from "@/infra/database/database.module";
-import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import { INestApplication } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
-import { hash } from "bcryptjs";
 import request from "supertest";
+import { QuestionFactory } from "test/factories/make-question";
 import { StudentFactory } from "test/factories/make-student";
 
-describe("E2E: Create question", () => {
+describe("E2E: Get question by slug", () => {
 	let app: INestApplication;
-	let prisma: PrismaService;
-	let studentFactory: StudentFactory
 	let jwt: JwtService;
+	let studentFactory: StudentFactory;
+	let questionFactory: QuestionFactory;
 
 	beforeAll(async () => {
 		const moduleRef = await Test.createTestingModule({
 			imports: [AppModule, DatabaseModule],
-			providers: [StudentFactory,],
+            providers: [StudentFactory, QuestionFactory],
 		}).compile();
 
 		app = moduleRef.createNestApplication();
-		prisma = moduleRef.get(PrismaService);
 		jwt = moduleRef.get(JwtService);
-		studentFactory = moduleRef.get(StudentFactory)
+        studentFactory = moduleRef.get(StudentFactory);
+        questionFactory = moduleRef.get(QuestionFactory);
 
 		await app.init();
 	});
 
-	test("[POST] /questions", async () => {
+	test("[GET] /questions:slug", async () => {
 		const newUser = await studentFactory.makePrismaStudent()
 		const accessToken = jwt.sign({ sub: newUser.id.toString() });
+		
+        await questionFactory.makePrismaQuestion({authorId: newUser.id, slug: Slug.create("slug-1"), title: `Question 1`})
+
 		const response = await request(app.getHttpServer())
-			.post("/questions")
+			.get(`/questions/slug-1`)
 			.set("Authorization", `Bearer ${accessToken}`)
-			.send({
-				title: "New question",
-				content: "some content",
-			});
+			.send();
 
-		expect(response.status).toBe(201);
-
-		const question = await prisma.question.findFirst({
-			where: { title: "New question" },
+		expect(response.statusCode).toBe(200);
+		expect(response.body).toEqual({
+			question: expect.objectContaining({ title: `Question 1` }),
 		});
-
-		expect(question).not.toBeNull();
 	});
 });

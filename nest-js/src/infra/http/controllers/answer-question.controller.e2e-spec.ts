@@ -4,47 +4,51 @@ import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import { INestApplication } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
-import { hash } from "bcryptjs";
 import request from "supertest";
+import { QuestionFactory } from "test/factories/make-question";
 import { StudentFactory } from "test/factories/make-student";
 
-describe("E2E: Create question", () => {
+describe("E2E: Answer question", () => {
 	let app: INestApplication;
 	let prisma: PrismaService;
-	let studentFactory: StudentFactory
 	let jwt: JwtService;
+	let studentFactory: StudentFactory
+    let questionFactory: QuestionFactory
 
 	beforeAll(async () => {
 		const moduleRef = await Test.createTestingModule({
 			imports: [AppModule, DatabaseModule],
-			providers: [StudentFactory,],
+			providers: [StudentFactory, QuestionFactory],
 		}).compile();
 
 		app = moduleRef.createNestApplication();
 		prisma = moduleRef.get(PrismaService);
 		jwt = moduleRef.get(JwtService);
 		studentFactory = moduleRef.get(StudentFactory)
+		questionFactory = moduleRef.get(QuestionFactory)
 
 		await app.init();
 	});
 
-	test("[POST] /questions", async () => {
+	test("[POST] /questions/:questionId/answers", async () => {
 		const newUser = await studentFactory.makePrismaStudent()
 		const accessToken = jwt.sign({ sub: newUser.id.toString() });
+        const question = await questionFactory.makePrismaQuestion({ authorId: newUser.id })
 		const response = await request(app.getHttpServer())
-			.post("/questions")
+			.post(`/questions/${question.id.toString()}/answers`)
 			.set("Authorization", `Bearer ${accessToken}`)
 			.send({
-				title: "New question",
-				content: "some content",
+				content: "New answer",
 			});
 
-		expect(response.status).toBe(201);
+            expect(response.status).toBe(201);
 
-		const question = await prisma.question.findFirst({
-			where: { title: "New question" },
+		const answerOnDatabase = await prisma.answer.findFirst({
+			where:{
+				content: "New answer",
+			},
 		});
 
-		expect(question).not.toBeNull();
+        expect(answerOnDatabase).toBeTruthy()
 	});
 });

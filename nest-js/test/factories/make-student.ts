@@ -3,7 +3,10 @@ import {
 	Student,
 	StudentProps,
 } from "@/domain/forum/enterprise/entities/student";
+import { PrismaStudentMapper } from "@/infra/database/prisma/mappers/prisma-student-mapper";
 import { faker } from "@faker-js/faker";
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "@/infra/database/prisma/prisma.service";
 
 export function makeStudent(
 	override: Partial<StudentProps> = {},
@@ -19,5 +22,20 @@ export function makeStudent(
 		id
 	);
 
-    return student
+	return student;
+}
+
+@Injectable()
+export class StudentFactory {
+	constructor(private prisma: PrismaService) {}
+
+	async makePrismaStudent(data: Partial<StudentProps> = {}) {
+		const student = makeStudent(data);
+
+		await this.prisma.user.create({
+			data: PrismaStudentMapper.toPersistence(student),
+		});
+
+		return student;
+	}
 }

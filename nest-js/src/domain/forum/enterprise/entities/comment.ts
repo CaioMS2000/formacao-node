@@ -5,14 +5,14 @@ export interface CommentProps {
 	authorId: UniqueId;
 	content: string;
 	createdAt: Date;
-	updateddAt?: Date;
+	updatedAt?: Date|null;
 }
 
 export abstract class Comment<
 	Props extends CommentProps
 > extends Entity<Props> {
 	private touch() {
-		this.props.updateddAt = new Date();
+		this.props.updatedAt = new Date();
 	}
 
 	get content() {
@@ -27,8 +27,8 @@ export abstract class Comment<
 		return this.props.createdAt;
 	}
 
-	get updateddAt() {
-		return this.props.updateddAt;
+	get updatedAt() {
+		return this.props.updatedAt;
 	}
 
 	set content(v: string) {

@@ -11,12 +11,12 @@ export interface AnswerProps {
 	questionId: UniqueId;
 	attachments: AnswerAttachmentList;
 	createdAt: Date;
-	updateddAt?: Date;
+	updatedAt?: Date|null;
 }
 
 export class Answer extends AggregateRoot<AnswerProps> {
 	private touch() {
-		this.props.updateddAt = new Date();
+		this.props.updatedAt = new Date();
 	}
 
 	get content() {
@@ -39,8 +39,8 @@ export class Answer extends AggregateRoot<AnswerProps> {
 		return this.props.createdAt;
 	}
 
-	get updateddAt() {
-		return this.props.updateddAt;
+	get updatedAt() {
+		return this.props.updatedAt;
 	}
 
 	get excerpt() {
