@@ -17,12 +17,12 @@ export class PrismaAnswerRepository implements AnswerRepository{
 	async save(answer: Answer): Promise<void> {
 		const data = PrismaAnswerMapper.toPersistence(answer);
 
-		await this.prisma.question.update({ where: { id: data.id }, data });
+		await this.prisma.answer.update({ where: { id: data.id }, data });
 	}
 	async delete(answer: Answer): Promise<void> {
 		const data = PrismaAnswerMapper.toPersistence(answer);
 
-		await this.prisma.question.delete({ where: { id: data.id } });
+		await this.prisma.answer.delete({ where: { id: data.id } });
 	}
     async findById(answerId: string): Promise<Answer | null> {
         const answer = await this.prisma.answer.findUnique({

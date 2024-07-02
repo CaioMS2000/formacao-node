@@ -9,13 +9,13 @@ import { AnswerFactory } from "test/factories/make-answer";
 import { QuestionFactory } from "test/factories/make-question";
 import { StudentFactory } from "test/factories/make-student";
 
-describe("E2E: Edit answers", () => {
+describe("E2E: Delete question", () => {
 	let app: INestApplication;
 	let prisma: PrismaService;
 	let jwt: JwtService;
-	let studentFactory: StudentFactory;
-	let answerFactory: AnswerFactory;
-	let questionFactory: QuestionFactory;
+	let studentFactory: StudentFactory
+    let questionFactory: QuestionFactory
+    let answerFactory: AnswerFactory
 
 	beforeAll(async () => {
 		const moduleRef = await Test.createTestingModule({
@@ -26,40 +26,32 @@ describe("E2E: Edit answers", () => {
 		app = moduleRef.createNestApplication();
 		prisma = moduleRef.get(PrismaService);
 		jwt = moduleRef.get(JwtService);
-		studentFactory = moduleRef.get(StudentFactory);
-		answerFactory = moduleRef.get(AnswerFactory);
-		questionFactory = moduleRef.get(QuestionFactory);
+		studentFactory = moduleRef.get(StudentFactory)
+		questionFactory = moduleRef.get(QuestionFactory)
+		answerFactory = moduleRef.get(AnswerFactory)
 
 		await app.init();
 	});
 
-	test("[PUT] /answers/:id", async () => {
-		const newUser = await studentFactory.makePrismaStudent();
-        const userId = newUser.id;
-		const accessToken = jwt.sign({ sub: userId.toString() });
-		const question = await questionFactory.makePrismaQuestion({
-			authorId: newUser.id,
-		});
-		const answer = await answerFactory.makePrismaAnswer({
-			questionId: question.id,
-            authorId: userId,
-		});
-        const answerId = answer.id;
+	test("[DELETE] /answers/:id", async () => {
+		const newUser = await studentFactory.makePrismaStudent()
+		const accessToken = jwt.sign({ sub: newUser.id.toString() });
+        const question = await questionFactory.makePrismaQuestion({ authorId: newUser.id })
+        const answer = await answerFactory.makePrismaAnswer({ authorId: newUser.id, questionId: question.id })
+        const answerId = answer.id
 		const response = await request(app.getHttpServer())
-			.put(`/answers/${answerId.toString()}`)
+			.delete(`/answers/${answerId.toString()}`)
 			.set("Authorization", `Bearer ${accessToken}`)
-			.send({
-				content: "content has changed",
-			});
+			.send();
 
-		expect(response.status).toBe(204);
+            expect(response.status).toBe(204);
 
 		const answerOnDatabase = await prisma.answer.findFirst({
-			where: {
-				content: "content has changed",
+			where:{
+				id: answerId.toString(),
 			},
 		});
 
-		expect(answerOnDatabase).toBeTruthy();
+        expect(answerOnDatabase).toBeFalsy()
 	});
 });

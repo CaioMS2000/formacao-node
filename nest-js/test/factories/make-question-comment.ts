@@ -27,17 +27,17 @@ export function makeQuestionComment(
 
 @Injectable()
 export class QuestionCommentFactory {
-  constructor(private prisma: PrismaService) {}
+	constructor(private prisma: PrismaService) {}
 
-  async makePrismaQuestion(
-    data: Partial<QuestionCommentProps> = {},
-  ): Promise<QuestionComment> {
-    const questionComment = makeQuestionComment(data)
+	async makePrismaQuestionComment(
+		data: Partial<QuestionCommentProps> = {}
+	): Promise<QuestionComment> {
+		const questionComment = makeQuestionComment(data);
 
-    await this.prisma.comment.create({
-      data: PrismaQuestionCommentMapper.toPersistence(questionComment),
-    })
+		await this.prisma.comment.create({
+			data: PrismaQuestionCommentMapper.toPersistence(questionComment),
+		});
 
-    return questionComment
-  }
+		return questionComment;
+	}
 }
