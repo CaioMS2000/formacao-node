@@ -1,5 +1,5 @@
 import { Either, left, right } from "@/core/either";
-import { AnswerRepository } from "../repositories/answers-repository";
+import { AnswersRepository } from "../repositories/answers-repository";
 import { Answer } from "@/domain/forum/enterprise/entities/answer";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { Injectable } from "@nestjs/common";
@@ -18,7 +18,7 @@ type FetchQuestionAnswersUseCaseResponse = Either<
 
 @Injectable()
 export class FetchQuestionAnswersUseCase {
-	constructor(private answersRepository: AnswerRepository) {}
+	constructor(private answersRepository: AnswersRepository) {}
 
 	async execute({
 		page,

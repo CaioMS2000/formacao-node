@@ -1,5 +1,5 @@
 import { PaginationParams } from "@/core/repositories/pagination-params";
-import { QuestionCommentRepository } from "@/domain/forum/application/repositories/question-comments-repository";
+import { QuestionCommentsRepository } from "@/domain/forum/application/repositories/question-comments-repository";
 import { QuestionComment } from "@/domain/forum/enterprise/entities/question-comment";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
@@ -7,7 +7,7 @@ import { PrismaQuestionCommentMapper } from "../mappers/prisma-question-comment-
 
 @Injectable()
 export class PrismaQuestionCommentsRepository
-	implements QuestionCommentRepository
+	implements QuestionCommentsRepository
 {
 	constructor(private readonly prisma: PrismaService) {}
 

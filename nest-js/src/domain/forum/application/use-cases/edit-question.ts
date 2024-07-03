@@ -3,7 +3,7 @@ import { QuestionsRepository } from "../repositories/questions-repository";
 import { Either, left, right } from "@/core/either";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
-import { QuestionAttachmentRepository } from "../repositories/question-attachments-repository";
+import { QuestionAttachmentsRepository } from "../repositories/question-attachments-repository";
 import { QuestionAttachmentList } from "../../enterprise/entities/question-attachment-list";
 import { QuestionAttachment } from "../../enterprise/entities/question-attachment";
 import { UniqueId } from "@/core/entities/unique-id";
@@ -28,7 +28,7 @@ type EditQuestionUseCaseResponse = Either<
 export class EditQuestionUseCase {
 	constructor(
 		private questionsRepository: QuestionsRepository,
-		private questionAttachmentRepository: QuestionAttachmentRepository
+		private questionAttachmentRepository: QuestionAttachmentsRepository
 	) {}
 
 	async execute({

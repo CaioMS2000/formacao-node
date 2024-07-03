@@ -1,5 +1,5 @@
 import { QuestionComment } from "@/domain/forum/enterprise/entities/question-comment";
-import { QuestionCommentRepository } from "../repositories/question-comments-repository";
+import { QuestionCommentsRepository } from "../repositories/question-comments-repository";
 import { Either, right } from "@/core/either";
 import { Injectable } from "@nestjs/common";
 
@@ -18,7 +18,7 @@ type FetchQuestionCommentsUseCaseResponse = Either<
 @Injectable()
 export class FetchQuestionCommentsUseCase {
 	constructor(
-		private questioncommentsRepository: QuestionCommentRepository
+		private questioncommentsRepository: QuestionCommentsRepository
 	) {}
 
 	async execute({

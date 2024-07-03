@@ -1,13 +1,15 @@
 import { PaginationParams } from "@/core/repositories/pagination-params";
-import { AnswerCommentRepository } from "@/domain/forum/application/repositories/answer-comments-repository";
+import { AnswerCommentsRepository } from "@/domain/forum/application/repositories/answer-comments-repository";
 import { AnswerComment } from "@/domain/forum/enterprise/entities/answer-comment";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { PrismaAnswerCommentMapper } from "../mappers/prisma-answer-comment-mapper";
 
 @Injectable()
-export class PrismaAnswerCommentRepository implements AnswerCommentRepository{
-    constructor(private readonly prisma: PrismaService) {}
+export class PrismaAnswerCommentsRepository
+	implements AnswerCommentsRepository
+{
+	constructor(private readonly prisma: PrismaService) {}
 
 	async create(answerComment: AnswerComment): Promise<void> {
 		const data = PrismaAnswerCommentMapper.toPersistence(answerComment);

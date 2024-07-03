@@ -1,8 +1,8 @@
-import { QuestionAttachmentRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
+import { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
 import { QuestionAttachment } from "@/domain/forum/enterprise/entities/question-attachment";
 
 export class InMemoryQuestionAttachmentsRepository
-	implements QuestionAttachmentRepository
+	implements QuestionAttachmentsRepository
 {
 	attachments: QuestionAttachment[] = [];
 
@@ -11,7 +11,9 @@ export class InMemoryQuestionAttachmentsRepository
 	}
 
 	async deleteMany(attachments: QuestionAttachment[]) {
-		this.attachments = this.attachments.filter(a => !attachments.some(b => b.equals(a)))
+		this.attachments = this.attachments.filter(
+			(a) => !attachments.some((b) => b.equals(a))
+		);
 	}
 
 	async findManyByQuestionId(questionId: string) {

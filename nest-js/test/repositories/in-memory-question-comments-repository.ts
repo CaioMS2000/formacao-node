@@ -1,9 +1,9 @@
 import { PaginationParams } from "@/core/repositories/pagination-params";
 import { QuestionComment } from "@/domain/forum/enterprise/entities/question-comment";
-import { QuestionCommentRepository } from "@/domain/forum/application/repositories/question-comments-repository";
+import { QuestionCommentsRepository } from "@/domain/forum/application/repositories/question-comments-repository";
 
 export class InMemoryQuestionCommentsRepository
-	implements QuestionCommentRepository
+	implements QuestionCommentsRepository
 {
 	questionComments: QuestionComment[] = [];
 

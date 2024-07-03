@@ -1,6 +1,6 @@
 import { QuestionComment } from "@/domain/forum/enterprise/entities/question-comment";
 import { QuestionsRepository } from "../repositories/questions-repository";
-import { QuestionCommentRepository } from "../repositories/question-comments-repository";
+import { QuestionCommentsRepository } from "../repositories/question-comments-repository";
 import { UniqueId } from "@/core/entities/unique-id";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { Either, left, right } from "@/core/either";
@@ -23,7 +23,7 @@ type CommentOnQuestionUseCaseResponse = Either<
 export class CommentOnQuestionUseCase {
 	constructor(
 		private questionsRepository: QuestionsRepository,
-		private questionCommentsRepository: QuestionCommentRepository
+		private questionCommentsRepository: QuestionCommentsRepository
 	) {}
 
 	async execute({

@@ -1,19 +1,23 @@
 import { PaginationParams } from "@/core/repositories/pagination-params";
 import { Question } from "@/domain/forum/enterprise/entities/question";
 import { QuestionsRepository } from "@/domain/forum/application/repositories/questions-repository";
-import { QuestionAttachmentRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
+import { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
 import { DomainEvents } from "@/core/events/domain-events";
 
 export class InMemoryQuestionsRepository implements QuestionsRepository {
 	questions: Question[] = [];
 
-	constructor(private questionAttachmentRepository: QuestionAttachmentRepository) {}
+	constructor(
+		private questionAttachmentRepository: QuestionAttachmentsRepository
+	) {}
 
 	async create(question: Question) {
 		this.questions.push(question);
-		await this.questionAttachmentRepository.createMany(question.attachments.getItems())
+		await this.questionAttachmentRepository.createMany(
+			question.attachments.getItems()
+		);
 
-		DomainEvents.dispatchEventsForAggregate(question.id)
+		DomainEvents.dispatchEventsForAggregate(question.id);
 	}
 
 	async save(question: Question) {
@@ -22,10 +26,14 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
 		);
 
 		this.questions[index] = question;
-		await this.questionAttachmentRepository.createMany(question.attachments.getNewItems())
-		await this.questionAttachmentRepository.deleteMany(question.attachments.getRemovedItems())
+		await this.questionAttachmentRepository.createMany(
+			question.attachments.getNewItems()
+		);
+		await this.questionAttachmentRepository.deleteMany(
+			question.attachments.getRemovedItems()
+		);
 
-		DomainEvents.dispatchEventsForAggregate(question.id)
+		DomainEvents.dispatchEventsForAggregate(question.id);
 	}
 
 	async delete(question: Question) {

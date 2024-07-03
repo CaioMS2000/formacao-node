@@ -1,13 +1,13 @@
 import { PaginationParams } from "@/core/repositories/pagination-params";
-import { AnswerRepository } from "@/domain/forum/application/repositories/answers-repository";
+import { AnswersRepository } from "@/domain/forum/application/repositories/answers-repository";
 import { Answer } from "@/domain/forum/enterprise/entities/answer";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { PrismaAnswerMapper } from "../mappers/prisma-answer-mapper";
 
 @Injectable()
-export class PrismaAnswerRepository implements AnswerRepository{
-    constructor(private readonly prisma: PrismaService) {}
+export class PrismaAnswersRepository implements AnswersRepository {
+	constructor(private readonly prisma: PrismaService) {}
 
 	async create(answer: Answer): Promise<void> {
 		const data = PrismaAnswerMapper.toPersistence(answer);
@@ -24,8 +24,8 @@ export class PrismaAnswerRepository implements AnswerRepository{
 
 		await this.prisma.answer.delete({ where: { id: data.id } });
 	}
-    async findById(answerId: string): Promise<Answer | null> {
-        const answer = await this.prisma.answer.findUnique({
+	async findById(answerId: string): Promise<Answer | null> {
+		const answer = await this.prisma.answer.findUnique({
 			where: {
 				id: answerId,
 			},
@@ -34,9 +34,12 @@ export class PrismaAnswerRepository implements AnswerRepository{
 		if (!answer) return null;
 
 		return PrismaAnswerMapper.toDomain(answer);
-    }
-    async findManyByQuestionId(questionId: string, params: PaginationParams): Promise<Answer[]> {
-        const answers = await this.prisma.answer.findMany({
+	}
+	async findManyByQuestionId(
+		questionId: string,
+		params: PaginationParams
+	): Promise<Answer[]> {
+		const answers = await this.prisma.answer.findMany({
 			where: {
 				questionId,
 			},
@@ -44,6 +47,6 @@ export class PrismaAnswerRepository implements AnswerRepository{
 			skip: (params.page - 1) * 20,
 		});
 
-        return answers.map(PrismaAnswerMapper.toDomain);
-    }
+		return answers.map(PrismaAnswerMapper.toDomain);
+	}
 }
