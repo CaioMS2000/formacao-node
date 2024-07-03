@@ -6,6 +6,14 @@ export class InMemoryQuestionAttachmentsRepository
 {
 	attachments: QuestionAttachment[] = [];
 
+	async createMany(attachments: QuestionAttachment[]) {
+		this.attachments.push(...attachments);
+	}
+
+	async deleteMany(attachments: QuestionAttachment[]) {
+		this.attachments = this.attachments.filter(a => !attachments.some(b => b.equals(a)))
+	}
+
 	async findManyByQuestionId(questionId: string) {
 		const questionAttachments = this.attachments.filter(
 			(a) => a.questionId.toString() === questionId

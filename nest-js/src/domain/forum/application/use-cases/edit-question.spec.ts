@@ -83,4 +83,40 @@ describe("Edit question", () => {
 		expect(result.isLeft()).toBe(true);
 		expect(result.value).toBeInstanceOf(NotAllowedError);
 	});
+
+	test("should sync new and removed attachments on edition", async () => {
+		const newQuestion = makeQuestion(
+			{ authorId: new UniqueId("author-id") },
+			new UniqueId("any-id")
+		);
+
+		inMemoryQuestionsRepository.questions.push(newQuestion);
+		inMemoryQuestionAttachmentsRepository.attachments.push(
+			makeQuestionAttachment({
+				questionId: newQuestion.id,
+				attachmentId: new UniqueId("1"),
+			}),
+			makeQuestionAttachment({
+				questionId: newQuestion.id,
+				attachmentId: new UniqueId("2"),
+			})
+		);
+
+		const result = await useCase.execute({
+			userId: "author-id",
+			title: "título de teste",
+			content: "conteudo de teste",
+			questionId: "any-id",
+			attachmentsIds: ["1", "3"],
+		});
+
+		expect(result.isRight()).toBe(true);
+		expect(inMemoryQuestionAttachmentsRepository.attachments).toHaveLength(2)
+		expect(inMemoryQuestionAttachmentsRepository.attachments).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ attachmentId: new UniqueId("1") }),
+				expect.objectContaining({ attachmentId: new UniqueId("3") }),
+			])
+		);
+	});
 });
