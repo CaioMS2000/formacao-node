@@ -26,7 +26,7 @@ import { FetchQuestionAnswersUseCase } from "@/domain/forum/application/use-case
 import { ChooseQuestionBestAnswerUseCase } from "@/domain/forum/application/use-cases/choose-question-best-answer";
 import { ChooseQuestionBestAnswerController } from "./controllers/choose-question-best-answer.controller";
 import { CommentOnQuestionUseCase } from "@/domain/forum/application/use-cases/comment-on-question";
-import { CommentOnQuestionController } from "./controllers/coment-on-question.controller";
+import { CommentOnQuestionController } from "./controllers/comment-on-question.controller";
 import { DeleteQuestionCommentUseCase } from "@/domain/forum/application/use-cases/delete-question-comment";
 import { DeleteQuestionCommentController } from "./controllers/delete-question-comment.controller";
 import { CommentOnAnswerController } from "./controllers/comment-on-answer.controller";
