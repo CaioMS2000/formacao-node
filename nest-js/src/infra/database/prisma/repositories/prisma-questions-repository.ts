@@ -4,11 +4,11 @@ import { Question } from "@/domain/forum/enterprise/entities/question";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { PrismaQuestionMapper } from "../mappers/prisma-question-mapper";
-import { PrismaQuestionAttachmentsRepository } from "./prisma-question-attachments-repository";
+import { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
 
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
-	constructor(private readonly prisma: PrismaService, private questionAttachmentsRepository: PrismaQuestionAttachmentsRepository) {}
+	constructor(private readonly prisma: PrismaService, private questionAttachmentsRepository: QuestionAttachmentsRepository) {}
 
 	async create(question: Question) {
 		const data = PrismaQuestionMapper.toPersistence(question);
