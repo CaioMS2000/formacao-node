@@ -14,39 +14,52 @@ describe("E2E: Edit question", () => {
 	let app: INestApplication;
 	let prisma: PrismaService;
 	let jwt: JwtService;
-	let studentFactory: StudentFactory
-    let questionFactory: QuestionFactory
-	let attachmentFactory: AttachmentFactory
-	let questionAttachmentFactory: QuestionAttachmentFactory
+	let studentFactory: StudentFactory;
+	let questionFactory: QuestionFactory;
+	let attachmentFactory: AttachmentFactory;
+	let questionAttachmentFactory: QuestionAttachmentFactory;
 
 	beforeAll(async () => {
 		const moduleRef = await Test.createTestingModule({
 			imports: [AppModule, DatabaseModule],
-			providers: [StudentFactory, QuestionFactory, AttachmentFactory, QuestionAttachmentFactory],
+			providers: [
+				StudentFactory,
+				QuestionFactory,
+				AttachmentFactory,
+				QuestionAttachmentFactory,
+			],
 		}).compile();
 
 		app = moduleRef.createNestApplication();
 		prisma = moduleRef.get(PrismaService);
 		jwt = moduleRef.get(JwtService);
-		studentFactory = moduleRef.get(StudentFactory)
-		questionFactory = moduleRef.get(QuestionFactory)
-		attachmentFactory = moduleRef.get(AttachmentFactory)
-		questionAttachmentFactory = moduleRef.get(QuestionAttachmentFactory)
+		studentFactory = moduleRef.get(StudentFactory);
+		questionFactory = moduleRef.get(QuestionFactory);
+		attachmentFactory = moduleRef.get(AttachmentFactory);
+		questionAttachmentFactory = moduleRef.get(QuestionAttachmentFactory);
 
 		await app.init();
 	});
 
 	test("[PUT] /questions/:id", async () => {
-		const newUser = await studentFactory.makePrismaStudent()
+		const newUser = await studentFactory.makePrismaStudent();
 		const accessToken = jwt.sign({ sub: newUser.id.toString() });
-		const attachment1 = await attachmentFactory.makePrismaAttachment()
-		const attachment2 = await attachmentFactory.makePrismaAttachment()
-        const question = await questionFactory.makePrismaQuestion({ authorId: newUser.id })
+		const attachment1 = await attachmentFactory.makePrismaAttachment();
+		const attachment2 = await attachmentFactory.makePrismaAttachment();
+		const question = await questionFactory.makePrismaQuestion({
+			authorId: newUser.id,
+		});
 
-		await questionAttachmentFactory.makeQuestionAttachment({attachmentId: attachment1.id, questionId: question.id})
-		await questionAttachmentFactory.makeQuestionAttachment({attachmentId: attachment2.id, questionId: question.id})
+		await questionAttachmentFactory.makePrismaQuestionAttachment({
+			attachmentId: attachment1.id,
+			questionId: question.id,
+		});
+		await questionAttachmentFactory.makePrismaQuestionAttachment({
+			attachmentId: attachment2.id,
+			questionId: question.id,
+		});
 
-		const attachment3 = await attachmentFactory.makePrismaAttachment()
+		const attachment3 = await attachmentFactory.makePrismaAttachment();
 
 		const response = await request(app.getHttpServer())
 			.put(`/questions/${question.id.toString()}`)
@@ -54,26 +67,33 @@ describe("E2E: Edit question", () => {
 			.send({
 				title: "New title",
 				content: "New content",
-				attachments: [attachment1.id.toString(), attachment3.id.toString()],
+				attachments: [
+					attachment1.id.toString(),
+					attachment3.id.toString(),
+				],
 			});
 
 		expect(response.status).toBe(204);
 
 		const questionOnDatabase = await prisma.question.findFirst({
-			where:{
+			where: {
 				title: "New title",
 				content: "New content",
 			},
 		});
 
-        expect(questionOnDatabase).toBeTruthy()
+		expect(questionOnDatabase).toBeTruthy();
 
-		const attachmentsOnDatabase = await prisma.attachment.findMany({where:{questionId: questionOnDatabase?.id}})
+		const attachmentsOnDatabase = await prisma.attachment.findMany({
+			where: { questionId: questionOnDatabase?.id },
+		});
 
-		expect(attachmentsOnDatabase.length).toBe(2)
-		expect(attachmentsOnDatabase).toEqual(expect.arrayContaining([
-			expect.objectContaining({id: attachment1.id.toString()}),
-			expect.objectContaining({id: attachment3.id.toString()}),
-		]))
+		expect(attachmentsOnDatabase.length).toBe(2);
+		expect(attachmentsOnDatabase).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ id: attachment1.id.toString() }),
+				expect.objectContaining({ id: attachment3.id.toString() }),
+			])
+		);
 	});
 });

@@ -19,21 +19,24 @@ export function makeQuestionAttachment(
 		id
 	);
 
-    return questionAttachment;
+	return questionAttachment;
 }
 
 @Injectable()
 export class QuestionAttachmentFactory {
 	constructor(private prisma: PrismaService) {}
 
-	async makeQuestionAttachment(
+	async makePrismaQuestionAttachment(
 		data: Partial<QuestionAttachmentProps> = {},
 		id?: UniqueId
 	): Promise<QuestionAttachment> {
 		const questionAttachment = makeQuestionAttachment(data, id);
 
-		await this.prisma.attachment.update({where:{id: questionAttachment.attachmentId.toString()}, data: {questionId: questionAttachment.questionId.toString()}});
+		await this.prisma.attachment.update({
+			where: { id: questionAttachment.attachmentId.toString() },
+			data: { questionId: questionAttachment.questionId.toString() },
+		});
 
-		return questionAttachment
+		return questionAttachment;
 	}
 }

@@ -5,6 +5,7 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { PrismaQuestionMapper } from "../mappers/prisma-question-mapper";
 import { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
+import { PrismaQuestionDetailsMapper } from "../mappers/prisma-question-details-mapper";
 
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
@@ -16,6 +17,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
 		await this.prisma.question.create({ data });
 		await this.questionAttachmentsRepository.createMany(question.attachments.getItems())
 	}
+	
 	async save(question: Question) {
 		const data = PrismaQuestionMapper.toPersistence(question);
 
@@ -25,22 +27,41 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
 			this.questionAttachmentsRepository.deleteMany(question.attachments.getRemovedItems())
 		])
 	}
+	
 	async delete(question: Question) {
 		const data = PrismaQuestionMapper.toPersistence(question);
 
 		await this.prisma.question.delete({ where: { id: data.id } });
 	}
+	
 	async findBySlug(slug: string) {
 		const question = await this.prisma.question.findUnique({
 			where: {
 				slug,
-			},
+			},			
 		});
 
 		if (!question) return null;
 
 		return PrismaQuestionMapper.toDomain(question);
 	}
+	
+	async findDetailsBySlug(slug: string) {
+		const question = await this.prisma.question.findUnique({
+			where: {
+				slug,
+			},
+			include: {
+				author: true,
+				attachments: true,
+			}
+		});
+
+		if (!question) return null;
+
+		return PrismaQuestionDetailsMapper.toDomain(question);
+	}
+	
 	async findById(id: string) {
 		const question = await this.prisma.question.findUnique({
 			where: {
@@ -52,6 +73,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
 
 		return PrismaQuestionMapper.toDomain(question);
 	}
+	
 	async findManyRecent(params: PaginationParams) {
 		const questions = await this.prisma.question.findMany({
 			orderBy: {

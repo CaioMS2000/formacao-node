@@ -30,7 +30,7 @@ describe("Fetch question answers", () => {
 		);
 
 		const result = await useCase.execute({ page: 1, questionId: "1" });
-
+		
 		expect(result.value.answers).toHaveLength(3);
 	});
 
