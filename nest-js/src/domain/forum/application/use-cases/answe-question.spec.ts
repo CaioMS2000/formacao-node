@@ -26,7 +26,7 @@ describe("Create answer", () => {
 		});
 
 		expect(result.isRight()).toBe(true);
-		expect(inMemoryAnswersRepository.answers[0]).toBe(result.value.answer);
+		expect(inMemoryAnswersRepository.answers[0]).toBe(result.value?.answer);
 		expect(
 			inMemoryAnswersRepository.answers[0].attachments.currentItems
 		).toHaveLength(2);
@@ -36,5 +36,23 @@ describe("Create answer", () => {
 			expect.objectContaining({ attachmentId: new UniqueId("1") }),
 			expect.objectContaining({ attachmentId: new UniqueId("2") }),
 		]);
+	});
+
+	test("should be able to create an answer and persist it's attachments", async () => {
+		const result = await useCase.execute({
+			content: "any content",
+			questionId: "1",
+			authorId: "1",
+			attachmentsIds: ["1", "2"],
+		});
+
+		expect(result.isRight()).toBe(true);
+		expect(inMemoryAnswerAttachmentsRepository.attachments).toHaveLength(2);
+		expect(inMemoryAnswerAttachmentsRepository.attachments).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({ attachmentId: new UniqueId("1") }),
+				expect.objectContaining({ attachmentId: new UniqueId("2") }),
+			])
+		);
 	});
 });

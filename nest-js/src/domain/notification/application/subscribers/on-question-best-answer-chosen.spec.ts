@@ -18,9 +18,8 @@ import { OnQuestionBestAnswerChosen } from "./on-question-best-answer-chosen";
 let inMemoryAnswerRepository: InMemoryAnswerRepository;
 let sendNotificationUseCase: SendNotificationUsecase;
 let inMemoryQuestionRepository: InMemoryQuestionsRepository;
-let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository;
-let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentsRepository;
+let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
 let inMemoryNotificationRepository: InMemoryNotificationRepository;
 // let sendNotificationExecuteSpy: SpyInstance<[SendNotificationUseRequest], Promise<SendNotificationUseResponse>>;
 let sendNotificationExecuteSpy: MockInstance<
@@ -30,16 +29,18 @@ let sendNotificationExecuteSpy: MockInstance<
 
 describe("On question best answer", () => {
 	beforeEach(() => {
-		inMemoryQuestionAttachmentsRepository =
-			new InMemoryQuestionAttachmentsRepository();
-		inMemoryAnswerAttachmentRepository =
-			new InMemoryAnswerAttachmentsRepository();
+		inMemoryAnswerAttachmentsRepository =
+		new InMemoryAnswerAttachmentsRepository();
 		inMemoryAnswerRepository = new InMemoryAnswerRepository(
 			inMemoryAnswerAttachmentsRepository
 		);
+
+		inMemoryQuestionAttachmentsRepository =
+			new InMemoryQuestionAttachmentsRepository();
 		inMemoryQuestionRepository = new InMemoryQuestionsRepository(
 			inMemoryQuestionAttachmentsRepository
 		);
+		
 		inMemoryNotificationRepository = new InMemoryNotificationRepository();
 		sendNotificationUseCase = new SendNotificationUsecase(
 			inMemoryNotificationRepository

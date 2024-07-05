@@ -51,11 +51,10 @@ export class EditAnswerUseCase {
 		const answerAttachmentList = new AnswerAttachmentList(
 			currentAnswerAttachments
 		);
-		const answerAttachments = attachmentsIds.map((id) =>
-			AnswerAttachment.create({
-				attachmentId: new UniqueId(id),
-				answerId: answer.id,
-			})
+		const answerAttachments = attachmentsIds.map((id) => (AnswerAttachment.create({
+			attachmentId: new UniqueId(id),
+			answerId: answer.id,
+		}))
 		);
 
 		answerAttachmentList.update(answerAttachments);
