@@ -8,7 +8,7 @@ import request from 'supertest'
 import { NotificationFactory } from 'test/factories/make-notification'
 import { StudentFactory } from 'test/factories/make-student'
 
-describe('E2E: Read notification', () => {
+describe('Read notification (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let studentFactory: StudentFactory
