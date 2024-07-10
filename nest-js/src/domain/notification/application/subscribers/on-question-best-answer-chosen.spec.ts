@@ -1,6 +1,6 @@
 import { makeAnswer } from "test/factories/make-answer";
 import { OnAnswerCreated } from "./on-answer-created";
-import { InMemoryAnswerRepository } from "test/repositories/in-memory-answers-repository";
+import { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository";
 import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository";
 import {
 	SendNotificationUsecase,
@@ -17,7 +17,7 @@ import { OnQuestionBestAnswerChosen } from "./on-question-best-answer-chosen";
 import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository";
 import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository";
 
-let inMemoryAnswerRepository: InMemoryAnswerRepository;
+let inMemoryAnswerRepository: InMemoryAnswersRepository;
 let sendNotificationUseCase: SendNotificationUsecase;
 let inMemoryQuestionRepository: InMemoryQuestionsRepository;
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository;
@@ -36,8 +36,8 @@ describe("On question best answer", () => {
 		inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository();
 		inMemoryStudentsRepository = new InMemoryStudentsRepository();
 		inMemoryAnswerAttachmentsRepository =
-		new InMemoryAnswerAttachmentsRepository();
-		inMemoryAnswerRepository = new InMemoryAnswerRepository(
+			new InMemoryAnswerAttachmentsRepository();
+		inMemoryAnswerRepository = new InMemoryAnswersRepository(
 			inMemoryAnswerAttachmentsRepository
 		);
 
@@ -46,9 +46,9 @@ describe("On question best answer", () => {
 		inMemoryQuestionRepository = new InMemoryQuestionsRepository(
 			inMemoryQuestionAttachmentsRepository,
 			inMemoryAttachmentsRepository,
-			inMemoryStudentsRepository,
+			inMemoryStudentsRepository
 		);
-		
+
 		inMemoryNotificationRepository = new InMemoryNotificationRepository();
 		sendNotificationUseCase = new SendNotificationUsecase(
 			inMemoryNotificationRepository
@@ -71,9 +71,9 @@ describe("On question best answer", () => {
 		inMemoryQuestionRepository.create(question);
 		inMemoryAnswerRepository.create(answer);
 
-        question.bestAnswerId = answer.id;
+		question.bestAnswerId = answer.id;
 
-        inMemoryQuestionRepository.save(question);
+		inMemoryQuestionRepository.save(question);
 
 		await waitFor(() => {
 			expect(sendNotificationExecuteSpy).toHaveBeenCalled();

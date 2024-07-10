@@ -1,4 +1,4 @@
-import { InMemoryAnswerRepository } from "test/repositories/in-memory-answers-repository";
+import { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository";
 import { makeAnswer } from "test/factories/make-answer";
 import { EditAnswerUseCase } from "./edit-answer";
 import { UniqueId } from "@/core/entities/unique-id";
@@ -7,14 +7,14 @@ import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory
 import { makeAnswerAttachment } from "test/factories/make-answer-attachment";
 
 let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
-let inMemoryAnswersRepository: InMemoryAnswerRepository;
+let inMemoryAnswersRepository: InMemoryAnswersRepository;
 let useCase: EditAnswerUseCase;
 
 describe("Edit answer", () => {
 	beforeEach(() => {
 		inMemoryAnswerAttachmentsRepository =
 			new InMemoryAnswerAttachmentsRepository();
-		inMemoryAnswersRepository = new InMemoryAnswerRepository(
+		inMemoryAnswersRepository = new InMemoryAnswersRepository(
 			inMemoryAnswerAttachmentsRepository
 		);
 		useCase = new EditAnswerUseCase(
@@ -107,7 +107,7 @@ describe("Edit answer", () => {
 		});
 
 		expect(result.isRight()).toBe(true);
-		expect(inMemoryAnswerAttachmentsRepository.attachments).toHaveLength(2)
+		expect(inMemoryAnswerAttachmentsRepository.attachments).toHaveLength(2);
 		expect(inMemoryAnswerAttachmentsRepository.attachments).toEqual(
 			expect.arrayContaining([
 				expect.objectContaining({ attachmentId: new UniqueId("1") }),

@@ -4,7 +4,7 @@ import { AnswersRepository } from "@/domain/forum/application/repositories/answe
 import { AnswerAttachmentsRepository } from "@/domain/forum/application/repositories/answer-attachments-repository";
 import { DomainEvents } from "@/core/events/domain-events";
 
-export class InMemoryAnswerRepository implements AnswersRepository {
+export class InMemoryAnswersRepository implements AnswersRepository {
 	answers: Answer[] = [];
 
 	constructor(
@@ -14,7 +14,9 @@ export class InMemoryAnswerRepository implements AnswersRepository {
 	async create(answer: Answer) {
 		this.answers.push(answer);
 
-		await this.answerAttachmentsRepository.createMany(answer.attachments.getItems())
+		await this.answerAttachmentsRepository.createMany(
+			answer.attachments.getItems()
+		);
 
 		DomainEvents.dispatchEventsForAggregate(answer.id);
 	}
@@ -45,9 +47,13 @@ export class InMemoryAnswerRepository implements AnswersRepository {
 
 		this.answers[index] = answer;
 
-		await this.answerAttachmentsRepository.createMany(answer.attachments.getNewItems())
-		await this.answerAttachmentsRepository.deleteMany(answer.attachments.getRemovedItems())
-		
+		await this.answerAttachmentsRepository.createMany(
+			answer.attachments.getNewItems()
+		);
+		await this.answerAttachmentsRepository.deleteMany(
+			answer.attachments.getRemovedItems()
+		);
+
 		DomainEvents.dispatchEventsForAggregate(answer.id);
 	}
 

@@ -1,6 +1,6 @@
 import { makeAnswer } from "test/factories/make-answer";
 import { OnAnswerCreated } from "./on-answer-created";
-import { InMemoryAnswerRepository } from "test/repositories/in-memory-answers-repository";
+import { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository";
 import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository";
 import {
 	SendNotificationUsecase,
@@ -16,7 +16,7 @@ import { waitFor } from "test/utils/wait-for";
 import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository";
 import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository";
 
-let inMemoryAnswerRepository: InMemoryAnswerRepository;
+let inMemoryAnswerRepository: InMemoryAnswersRepository;
 let sendNotificationUseCase: SendNotificationUsecase;
 let inMemoryQuestionRepository: InMemoryQuestionsRepository;
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository;
@@ -39,11 +39,11 @@ describe("On answer created", () => {
 		inMemoryQuestionRepository = new InMemoryQuestionsRepository(
 			inMemoryQuestionAttachmentsRepository,
 			inMemoryAttachmentsRepository,
-			inMemoryStudentsRepository,
+			inMemoryStudentsRepository
 		);
 		inMemoryAnswerAttachmentRepository =
 			new InMemoryAnswerAttachmentsRepository();
-		inMemoryAnswerRepository = new InMemoryAnswerRepository(
+		inMemoryAnswerRepository = new InMemoryAnswersRepository(
 			inMemoryAnswerAttachmentRepository
 		);
 		inMemoryNotificationRepository = new InMemoryNotificationRepository();
@@ -68,8 +68,8 @@ describe("On answer created", () => {
 		inMemoryQuestionRepository.create(question);
 		inMemoryAnswerRepository.create(answer);
 
-        await waitFor(() => {
-            expect(sendNotificationExecuteSpy).toHaveBeenCalled();
-        });
+		await waitFor(() => {
+			expect(sendNotificationExecuteSpy).toHaveBeenCalled();
+		});
 	});
 });

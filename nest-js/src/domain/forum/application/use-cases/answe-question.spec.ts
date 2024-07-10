@@ -1,17 +1,17 @@
-import { InMemoryAnswerRepository } from "test/repositories/in-memory-answers-repository";
+import { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository";
 import { AnswerQuestionUseCase } from "./answer-question";
 import { UniqueId } from "@/core/entities/unique-id";
 import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository";
 
 let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
-let inMemoryAnswersRepository: InMemoryAnswerRepository;
+let inMemoryAnswersRepository: InMemoryAnswersRepository;
 let useCase: AnswerQuestionUseCase;
 
 describe("Create answer", () => {
 	beforeEach(() => {
 		inMemoryAnswerAttachmentsRepository =
 			new InMemoryAnswerAttachmentsRepository();
-		inMemoryAnswersRepository = new InMemoryAnswerRepository(
+		inMemoryAnswersRepository = new InMemoryAnswersRepository(
 			inMemoryAnswerAttachmentsRepository
 		);
 		useCase = new AnswerQuestionUseCase(inMemoryAnswersRepository);

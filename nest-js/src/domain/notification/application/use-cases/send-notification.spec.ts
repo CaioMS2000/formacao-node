@@ -18,6 +18,6 @@ describe("Send notifications", () => {
         })
 
         expect(result.isRight()).toBe(true)
-        expect(inMemoryNotificationRepository.notifications[0]).toEqual(result.value.notification)
+        expect(inMemoryNotificationRepository.notifications[0]).toEqual(result.value?.notification)
     })
 })

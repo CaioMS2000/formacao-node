@@ -1,7 +1,7 @@
 import { InMemoryQuestionsRepository } from "test/repositories/in-memory-questions-repository";
 import { makeQuestion } from "test/factories/make-question";
 import { UniqueId } from "@/core/entities/unique-id";
-import { InMemoryAnswerRepository } from "test/repositories/in-memory-answers-repository";
+import { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository";
 import { ChooseQuestionBestAnswerUseCase } from "./choose-question-best-answer";
 import { makeAnswer } from "test/factories/make-answer";
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
@@ -13,7 +13,7 @@ import { InMemoryStudentsRepository } from "test/repositories/in-memory-students
 let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository;
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
-let inMemoryAnswerRepository: InMemoryAnswerRepository;
+let inMemoryAnswerRepository: InMemoryAnswersRepository;
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
 let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let useCase: ChooseQuestionBestAnswerUseCase;
@@ -29,9 +29,9 @@ describe("Choose question best answer", () => {
 		inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
 			inMemoryQuestionAttachmentsRepository,
 			inMemoryAttachmentsRepository,
-			inMemoryStudentsRepository,
+			inMemoryStudentsRepository
 		);
-		inMemoryAnswerRepository = new InMemoryAnswerRepository(
+		inMemoryAnswerRepository = new InMemoryAnswersRepository(
 			inMemoryAnswerAttachmentsRepository
 		);
 		useCase = new ChooseQuestionBestAnswerUseCase(
