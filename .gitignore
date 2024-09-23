@@ -5,3 +5,6 @@ node_modules
 .env
 **/*migration*
 coverage
+
+## vscode
+/*.code*
